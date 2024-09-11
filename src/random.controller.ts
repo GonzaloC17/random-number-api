@@ -1,10 +1,14 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, HttpException, HttpStatus } from '@nestjs/common';
 
 @Controller('random')
 export class RandomController {
   @Post()
   getRandomNumber(): { value: number } {
-    const randomValue = Math.floor(Math.random() * 100) + 1;
-    return { value: randomValue };
+    try {
+      const randomValue = Math.floor(Math.random() * 100) + 1;
+      return { value: randomValue };
+    } catch (error) {
+      throw new HttpException('Error generating random number', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
